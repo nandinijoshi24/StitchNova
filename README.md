@@ -1,0 +1,2 @@
+# StitchNova
+Tailoring Management System
