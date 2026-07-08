@@ -1,11 +1,9 @@
 const express = require("express");
-
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    res.json({
-        message: "Customer Route Working"
-    });
-});
+const customerController = require("../controllers/customerController");   
+
+router.post("/", customerController.addCustomer);
+router.get("/", customerController.getCustomers);
 
 module.exports = router;

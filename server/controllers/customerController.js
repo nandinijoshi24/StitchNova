@@ -1,8 +1,75 @@
-exports.getCustomers = (req, res) => {
+const prisma = require("../config/prismaClient");
 
-    res.json({
-        success: true,
-        message: "All Customers"
+// Add Customer
+exports.addCustomer = async (req, res) => {
+  try {
+    const { name, phone, email, address, gender } = req.body;
+
+    const customer = await prisma.customer.create({
+      data: {
+        name,
+        phone,
+        email,
+        address,
+        gender,
+      },
     });
 
+    res.status(201).json({
+      success: true,
+      message: "Customer added successfully",
+      data: customer,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Get All Customers
+exports.getCustomers = async (req, res) => {
+  try {
+    const customers = await prisma.customer.findMany({
+      orderBy: {
+        id: "desc",
+      },
+    });
+
+    res.json({
+      success: true,
+      data: customers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Get Customer By ID
+exports.getCustomerById = async (req, res) => {
+  res.json({
+    success: true,
+    message: "Get Customer By ID"
+  });
+};
+
+// Update Customer
+exports.updateCustomer = async (req, res) => {
+  res.json({
+    success: true,
+    message: "Customer Updated"
+  });
+};
+
+// Delete Customer
+exports.deleteCustomer = async (req, res) => {
+  res.json({
+    success: true,
+    message: "Customer Deleted"
+  });
 };

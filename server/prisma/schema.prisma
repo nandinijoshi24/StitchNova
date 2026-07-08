@@ -21,17 +21,18 @@ enum OrderStatus {
 }
 
 model Customer {
-  id            Int           @id @default(autoincrement())
-  name          String
-  phone         String        @unique
-  address       String?
-  gender        String?
-  createdAt     DateTime      @default(now())
+  id           Int            @id @default(autoincrement())
+  name         String
+  phone        String         @unique
+  email        String?        @unique
+  address      String?
+  gender       String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 
-  measurements  Measurement[]
-  orders        Order[]
+  measurements Measurement[]
+  orders       Order[]
 }
-
 model Tailor {
   id            Int           @id @default(autoincrement())
   name          String
