@@ -52,10 +52,35 @@ exports.getCustomers = async (req, res) => {
 
 // Get Customer By ID
 exports.getCustomerById = async (req, res) => {
-  res.json({
-    success: true,
-    message: "Get Customer By ID"
-  });
+  try {
+    const id = parseInt(req.params.id);
+
+    const customer = await prisma.customer.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!customer) {
+      return res.status(404).json({
+        success: false,
+        message: "Customer not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: customer,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 // Update Customer
