@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  PENDING
+  CUTTING
+  STITCHING
+  READY
+  DELIVERED
+}
+
+model Customer {
+  id            Int           @id @default(autoincrement())
+  name          String
+  phone         String        @unique
+  address       String?
+  gender        String?
+  createdAt     DateTime      @default(now())
+
+  measurements  Measurement[]
+  orders        Order[]
+}
+
+model Tailor {
+  id            Int           @id @default(autoincrement())
+  name          String
+  contact       String
+  specialization String?
+
+  orders        Order[]
+}
+
+model GarmentType {
+  id            Int           @id @default(autoincrement())
+  name          String
+  category      String
+  basePrice     Float
+
+  orders        Order[]
+}
+
+model Measurement {
+  id            Int           @id @default(autoincrement())
+  customerId    Int
+  garmentType   String
+  measurements  Json
+  notes         String?
+  dateTaken     DateTime      @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id])
+}
+
+model Order {
+  id              Int          @id @default(autoincrement())
+  customerId      Int
+  garmentTypeId   Int
+  tailorId        Int?
+  measurementId   Int?
+
+  fabricDetails   String?
+  quantity        Int
+  orderDate       DateTime     @default(now())
+  deliveryDate    DateTime
+
+  totalAmount     Float
+  advancePaid     Float
+  balanceAmount   Float
+
+  status          OrderStatus  @default(PENDING)
+
+  customer      Customer      @relation(fields: [customerId], references: [id])
+  garmentType   GarmentType   @relation(fields: [garmentTypeId], references: [id])
+  tailor        Tailor?       @relation(fields: [tailorId], references: [id])
+}
+
+model Payment {
+  id          Int        @id @default(autoincrement())
+  orderId     Int
+  amount      Float
+  mode        String
+  paymentDate DateTime   @default(now())
+}
