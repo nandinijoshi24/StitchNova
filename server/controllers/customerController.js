@@ -84,11 +84,40 @@ exports.getCustomerById = async (req, res) => {
 };
 
 // Update Customer
+// Update Customer
 exports.updateCustomer = async (req, res) => {
-  res.json({
-    success: true,
-    message: "Customer Updated"
-  });
+  try {
+    const id = parseInt(req.params.id);
+
+    const { name, phone, email, address, gender } = req.body;
+
+    const customer = await prisma.customer.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name,
+        phone,
+        email,
+        address,
+        gender,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "Customer updated successfully",
+      data: customer,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 // Delete Customer
