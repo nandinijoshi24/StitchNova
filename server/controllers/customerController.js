@@ -122,8 +122,27 @@ exports.updateCustomer = async (req, res) => {
 
 // Delete Customer
 exports.deleteCustomer = async (req, res) => {
-  res.json({
-    success: true,
-    message: "Customer Deleted"
-  });
+  try {
+    const id = parseInt(req.params.id);
+
+    const customer = await prisma.customer.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "Customer deleted successfully",
+      data: customer,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
