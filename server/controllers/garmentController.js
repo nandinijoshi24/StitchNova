@@ -82,3 +82,54 @@ exports.getGarmentById = async (req, res) => {
     });
   }
 };
+
+// Update Garment
+exports.updateGarment = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+
+    const { name, category, basePrice, description } = req.body;
+
+    const garment = await prisma.garmentType.update({
+      where: { id },
+      data: {
+        name,
+        category,
+        basePrice,
+        description,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "Garment updated successfully",
+      data: garment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Delete Garment
+exports.deleteGarment = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+
+    await prisma.garmentType.delete({
+      where: { id },
+    });
+
+    res.json({
+      success: true,
+      message: "Garment deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

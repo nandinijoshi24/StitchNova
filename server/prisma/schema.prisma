@@ -46,50 +46,46 @@ model GarmentType {
   updatedAt   DateTime @updatedAt
 
   orders       Order[]
-  measurements Measurement[]
 }
 model Tailor {
   id            Int           @id @default(autoincrement())
   name          String
   contact       String
   specialization String?
-
-  orders        Order[]
 }
 
 model Measurement {
-  id            Int           @id @default(autoincrement())
-  customerId    Int
-  measurements  Json
-  notes         String?
-  dateTaken     DateTime      @default(now())
+  id          Int      @id @default(autoincrement())
 
-  customer Customer @relation(fields: [customerId], references: [id])
-  garmentTypeId  Int
-  garmentType    GarmentType   @relation(fields: [garmentTypeId], references: [id])
+  customerId  Int      @unique
+
+  chest       Float?
+  waist       Float?
+  hip         Float?
+  shoulder    Float?
+  sleeve      Float?
+  length      Float?
+
+  notes       String?
+
+  customer    Customer @relation(fields: [customerId], references: [id])
 }
-
 model Order {
-  id              Int          @id @default(autoincrement())
-  customerId      Int
-  garmentTypeId   Int
-  tailorId        Int?
-  measurementId   Int?
+  id             Int         @id @default(autoincrement())
 
-  fabricDetails   String?
-  quantity        Int
-  orderDate       DateTime     @default(now())
-  deliveryDate    DateTime
+  customerId     Int
+  garmentTypeId  Int
 
-  totalAmount     Float
-  advancePaid     Float
-  balanceAmount   Float
+  quantity       Int
+  orderDate      DateTime    @default(now())
+  deliveryDate   DateTime
 
-  status          OrderStatus  @default(PENDING)
+  totalAmount    Float
 
-  customer      Customer      @relation(fields: [customerId], references: [id])
-  garmentType   GarmentType   @relation(fields: [garmentTypeId], references: [id])
-  tailor        Tailor?       @relation(fields: [tailorId], references: [id])
+  status         OrderStatus @default(PENDING)
+
+  customer       Customer    @relation(fields: [customerId], references: [id])
+  garmentType    GarmentType @relation(fields: [garmentTypeId], references: [id])
 }
 
 model Payment {
