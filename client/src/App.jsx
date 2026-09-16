@@ -3,6 +3,7 @@ import "./App.css";
 import Customers from "./Customers";
 import Garments from "./Garments";
 import Measurements from "./Measurements";
+import Orders from "./Orders";
 
 function App() {
   const [customers, setCustomers] = useState([]);
@@ -73,6 +74,14 @@ function App() {
 >
   Measurements
 </button>
+<button
+  className={`nav-item ${
+    activePage === "orders" ? "active" : ""
+  }`}
+  onClick={() => setActivePage("orders")}
+>
+  Orders
+</button>
         </nav>
       </aside>
 
@@ -86,7 +95,9 @@ function App() {
                 ? "Customers"
                 : activePage === "garments"
                 ? "Garments"
-                : "StitchNova"}
+                : activePage === "orders"
+                ? "Orders"
+                : "Measurements" }
             </h1>
 
             <p>
@@ -163,6 +174,9 @@ function App() {
 
         {/* MEASUREMENTS */}
 {activePage === "measurements" && <Measurements />}
+
+{activePage === "orders" && <Orders />}
+
       </main>
     </div>
   );

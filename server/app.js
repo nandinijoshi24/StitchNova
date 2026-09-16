@@ -5,7 +5,7 @@ require("dotenv").config();
 const customerRoutes = require("./routes/customerRoutes");
 const garmentRoutes = require("./routes/garmentRoutes");
 const measurementRoutes = require("./routes/measurementRoutes");
-
+const orderRoutes = require("./routes/orderRoutes");
 const app = express();
 
 app.use(cors());
@@ -18,6 +18,7 @@ app.get("/", (req, res) => {
 app.use("/api/customers", customerRoutes);
 app.use("/api/garments", garmentRoutes);
 app.use("/api/measurements", measurementRoutes);
+app.use("/api/orders", orderRoutes);
 
 // Test Route
 app.get("/test", (req, res) => {
